@@ -51,9 +51,24 @@ class _LoginWidgetState extends State<LoginWidget>{
     ),
   );
   Future signIn() async{
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text.trim(), 
-      password: passwordController.text.trim(),
+    // show loading indicator
+    showDialog(
+      context: context, 
+      barrierDismissible: false,
+      builder: (context) => Center(child: CircularProgressIndicator()),
     );
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(), 
+        password: passwordController.text.trim(),
+      );
+    // catch error
+    } on FirebaseAuthException catch (e){
+      print(e);
+    }
+
+    // hides loading indicator when done
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);  
   }
 }

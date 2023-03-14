@@ -11,11 +11,14 @@ Future main() async{
   runApp(MyApp());
 }
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 class MyApp extends StatelessWidget {
   static final String title = 'Setup Firebase';
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+    navigatorKey: navigatorKey,
     debugShowCheckedModeBanner: false,
     title: title,
     theme: ThemeData.dark().copyWith(
@@ -31,9 +34,16 @@ class MainPage extends StatelessWidget{
     body: StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot){
-        // if user is logged in, display homepage. Else, display login page
-        if (snapshot.hasData){
+        // loading indicator
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Center(child: CircularProgressIndicator());
+        // error message
+        } else if (snapshot.hasError){
+          return Center(child: Text('Something went wrong'));
+        // if logged in, go to homepage
+        } else if (snapshot.hasData){
           return HomePage();
+        // if logged out, go to login page
         } else {
           return LoginWidget();
         }
