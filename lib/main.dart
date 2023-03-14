@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:login_auth/login_widget.dart';
 import 'package:login_auth/utils.dart';
+import 'package:login_auth/verify_email_page.dart';
 import 'package:login_auth/Pages/home_page.dart';
 import 'package:login_auth/Pages/auth_page.dart';
 
@@ -45,7 +46,7 @@ class MainPage extends StatelessWidget{
           return Center(child: Text('Something went wrong'));
         // if logged in, go to homepage
         } else if (snapshot.hasData){
-          return HomePage();
+          return VerifyEmailPage();
         // if logged out, go to login page
         } else {
           return AuthPage();
